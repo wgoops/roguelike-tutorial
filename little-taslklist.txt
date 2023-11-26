@@ -1,0 +1,11 @@
+so the current task list: 
+
+- set up some venv tools
+- create directory structure
+    - so there are challenges to build a roguelike in like seven day 
+- read through first couple chapters of this tutorial
+
+tutorial is: http://rogueliketutorials.com/tutorials/tcod/v2/
+
+we'll be using something called tcod
+this will probably be much harder than I'd really like it to be so I'm setting my expectations very low.
