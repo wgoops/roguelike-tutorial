@@ -2,6 +2,7 @@
 import tcod 
 from engine import Engine
 from entity import Entity
+from game_map import GameMap
 from input_handlers import EventHandler
 
 def main(): 
@@ -9,6 +10,9 @@ def main():
     ##set screen settings 
     screen_width = 80
     screen_height = 50
+
+    map_width = 80
+    map_height = 45
     
     player_x = int(screen_width / 2)
     player_y = int(screen_height / 2)
@@ -40,9 +44,12 @@ def main():
     
     entities = {npc, player} 
 
+    game_map = GameMap(map_width, map_height)
+
     engine = Engine(
         entities = entities, 
         event_handler = event_handler,
+        game_map = game_map,
         player = player
     )
 
@@ -57,19 +64,19 @@ def main():
     
     #create screen
     with terminal as context: 
-        root_console = tcod.Console(screen_width, screen_height, order="F")
+        root_console = tcod.console.Console(screen_width, screen_height, order="F")
         
         ## SET UP GAME LOOP, VERY IMPORTANT
         while True: 
 
             # DRAW CURRENT FRAME 
             engine.render(
-                console = root_console, 
-                context = context
+                root_console, 
+                context
             )
             events = tcod.event.wait()
             engine.handle_events(events)
-            
+
 
 if __name__ == "__main__":
     main()
