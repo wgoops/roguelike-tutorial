@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import tcod 
-from actions import EscapeAction, MovementAction
+from engine import Engine
+from entity import Entity
 from input_handlers import EventHandler
 
 def main(): 
@@ -19,9 +20,32 @@ def main():
     )   #TODO make path to png not absolutely awful
 
     ## set up event handler
-
     event_handler = EventHandler()
+
+    ## set up entities
+
+    player = Entity(
+        x = int(screen_width/2),
+        y = int(screen_height/2),
+        char = "@",
+        color = (255,255,255)
+    )
+
+    npc = Entity(
+        x = int(screen_width/2),
+        y = int(screen_height/2 - 5),
+        char = "@",
+        color = (255,255,0)
+    )
     
+    entities = {npc, player} 
+
+    engine = Engine(
+        entities = entities, 
+        event_handler = event_handler,
+        player = player
+    )
+
     #define screen settings
     terminal = tcod.context.new_terminal(
         columns = screen_width,
@@ -37,20 +61,15 @@ def main():
         
         ## SET UP GAME LOOP, VERY IMPORTANT
         while True: 
-            root_console.print(x=player_x, y=player_y, string="@")
-            context.present(root_console)
-            root_console.clear()
-            for event in tcod.event.wait():
-                action = event_handler.dispatch(event)
-                if action is None: 
-                    continue
-                
-                if isinstance(action, MovementAction):
-                    player_x += action.dx
-                    player_y += action.dy
-                
-                elif isinstance(aciton, EscapeAction):
-                    raise SystemExit()
+
+            # DRAW CURRENT FRAME 
+            engine.render(
+                console = root_console, 
+                context = context
+            )
+            events = tcod.event.wait()
+            engine.handle_events(events)
+            
 
 if __name__ == "__main__":
     main()
