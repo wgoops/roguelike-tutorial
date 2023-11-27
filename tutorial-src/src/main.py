@@ -2,7 +2,7 @@
 import tcod 
 from engine import Engine
 from entity import Entity
-from game_map import GameMap
+from procgen import generate_dungeon
 from input_handlers import EventHandler
 
 def main(): 
@@ -17,6 +17,9 @@ def main():
     player_x = int(screen_width / 2)
     player_y = int(screen_height / 2)
 
+    room_max_size = 10
+    room_min_size = 6
+    max_rooms = 30
     ##import tileset
     
     tileset = tcod.tileset.load_tilesheet(
@@ -44,7 +47,14 @@ def main():
     
     entities = {npc, player} 
 
-    game_map = GameMap(map_width, map_height)
+    game_map = generate_dungeon(
+        map_width=map_width,
+        map_height=map_height, 
+        max_rooms=max_rooms,
+        room_min_size=room_min_size,
+        room_max_size=room_max_size,
+        player=player
+    )
 
     engine = Engine(
         entities = entities, 
