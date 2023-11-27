@@ -13,9 +13,6 @@ def main():
 
     map_width = 80
     map_height = 45
-    
-    player_x = int(screen_width / 2)
-    player_y = int(screen_height / 2)
 
     room_max_size = 10
     room_min_size = 6
@@ -29,7 +26,7 @@ def main():
     ## set up event handler
     event_handler = EventHandler()
 
-    ## set up entities
+    ## set up entities 
 
     player = Entity(
         x = int(screen_width/2),
@@ -47,6 +44,7 @@ def main():
     
     entities = {npc, player} 
 
+    ## create dungeon
     game_map = generate_dungeon(
         map_width=map_width,
         map_height=map_height, 
@@ -56,6 +54,7 @@ def main():
         player=player
     )
 
+    ## initialize engine
     engine = Engine(
         entities = entities, 
         event_handler = event_handler,
@@ -63,7 +62,7 @@ def main():
         player = player
     )
 
-    #define screen settings
+    ## define screen settings
     terminal = tcod.context.new_terminal(
         columns = screen_width,
         rows = screen_height,
@@ -72,7 +71,7 @@ def main():
         vsync = True,
     )
     
-    #create screen
+    ## create screen
     with terminal as context: 
         root_console = tcod.console.Console(screen_width, screen_height, order="F")
         
