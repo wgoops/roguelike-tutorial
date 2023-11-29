@@ -9,8 +9,8 @@ from input_handlers import EventHandler
 def main(): 
 
     ##set screen settings 
-    screen_width = 80
-    screen_height = 50
+    screen_width = 120
+    screen_height = 75
 
     map_width = 80
     map_height = 45
