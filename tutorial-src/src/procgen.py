@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import Tuple
 from game_map import GameMap
 import tile_types
+import entity_factories
 from typing import Iterator, Tuple, List, TYPE_CHECKING
 import random
 import tcod
@@ -63,10 +64,11 @@ def generate_dungeon(
     map_width:int,
     map_height:int,
     player:Entity,
+    max_monsters_per_room:int
 ) -> GameMap:
     """Generate a new dungeon map."""
 
-    dungeon = GameMap(map_width, map_height) 
+    dungeon = GameMap(map_width, map_height, entities=[player]) 
     rooms: List[RectangularRoom] = []
     
     for r in range(69):
@@ -95,7 +97,29 @@ def generate_dungeon(
             for x, y in tunnel_between(rooms[-1].center, new_room.center):
                 dungeon.tiles[x, y] = tile_types.floor
 
-            #append new room to the list.
+        #add monsters to room: 
+
+        place_entities(
+            room = new_room, 
+            dungeon = dungeon, 
+            maximum_monsters = max_monsters_per_room)
+        #append new room to the list.
         rooms.append(new_room)
     return dungeon
 
+def place_entities(
+        room: RectangularRoom, 
+        dungeon: GameMap, 
+        maximum_monsters: int) -> None: 
+    
+    number_of_monsters = random.randint(0, maximum_monsters)
+
+    for i in range(number_of_monsters):
+        x = random.randint(room.x1 + 1, room.x2 - 1)
+        y = random.randint(room.y1 + 1, room.y2  - 1)
+
+        if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
+            if random.random() < 0.8: 
+                entity_factories.orc.spawn(dungeon, x, y)
+            else: 
+                entity_factories.troll.spawn(dungeon, x, y)
