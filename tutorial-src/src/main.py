@@ -57,8 +57,9 @@ def main():
         tileset = tileset,
         title = "Yet Another Roguelike Tutorial",
         vsync = True,
+        sdl_window_flags=tcod.context.SDL_WINDOW_FULLSCREEN_DESKTOP
     )
-    
+        
     ## create screen
     with terminal as context: 
         root_console = tcod.console.Console(screen_width, screen_height, order="F")
