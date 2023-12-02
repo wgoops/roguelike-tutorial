@@ -29,7 +29,7 @@ class Entity:
         self.char = char
         self.color = color
         self.name = name
-        self.blocks_movementr = blocks_movement
+        self.blocks_movement = blocks_movement
 
     def spawn(self: T, gamemap: GameMap, x: int, y: int) -> T:
         """Spawn a copy of this instance at a given location"""

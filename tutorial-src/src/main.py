@@ -17,7 +17,7 @@ def main():
 
     room_max_size = 10
     room_min_size = 6
-    max_rooms = 30
+    max_rooms = 6
     max_monsters_per_room = 3
     ##import tileset
     
@@ -57,7 +57,7 @@ def main():
         tileset = tileset,
         title = "Yet Another Roguelike Tutorial",
         vsync = True,
-        sdl_window_flags=tcod.context.SDL_WINDOW_FULLSCREEN_DESKTOP
+        #sdl_window_flags=tcod.context.SDL_WINDOW_FULLSCREEN_DESKTOP
     )
         
     ## create screen
