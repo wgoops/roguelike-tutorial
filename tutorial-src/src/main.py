@@ -4,7 +4,6 @@ from engine import Engine
 import entity_factories
 import copy
 from procgen import generate_dungeon
-from input_handlers import EventHandler
 
 def main(): 
 
@@ -26,29 +25,21 @@ def main():
     )   #TODO make path to png not absolutely awful
 
     ## set up event handler
-    event_handler = EventHandler()
-
-    ## set up entities 
-
     player = copy.deepcopy(entity_factories.player)
-    
+    engine = Engine(player=player)
+
     ## create dungeon
-    game_map = generate_dungeon(
+    engine.game_map = generate_dungeon(
         map_width=map_width,
         map_height=map_height, 
         max_rooms=max_rooms,
         room_min_size=room_min_size,
         room_max_size=room_max_size,
-        player=player,
+        engine=engine,
         max_monsters_per_room=max_monsters_per_room,
     )
 
-    ## initialize engine
-    engine = Engine(
-        event_handler = event_handler,
-        game_map = game_map,
-        player = player
-    )
+    engine.update_fov()
 
     ## define screen settings
     terminal = tcod.context.new_terminal(
@@ -72,9 +63,7 @@ def main():
                 root_console, 
                 context
             )
-            events = tcod.event.wait()
-            engine.handle_events(events)
-
+            engine.event_handler.handle_events()
 
 if __name__ == "__main__":
     main()
