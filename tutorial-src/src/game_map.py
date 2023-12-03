@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from typing import Iterable, Optional, TYPE_CHECKING
+from typing import Iterable, Iterator, Optional, TYPE_CHECKING
 import numpy as np 
 from tcod.console import Console
 
+from entity import Actor
 import tile_types 
 
 if TYPE_CHECKING: 
@@ -30,6 +31,22 @@ class GameMap:
         ) #tiles player can currently see 
         self.explored = np.full((width, height), fill_value=False, order="F") #tiles player's explored previously
 
+    @property
+    def actors(self) -> Iterator[Actor]:
+        """Iterate over this map's living actors."""
+
+        yield from (
+            entity 
+            for entity in self.entities
+            if isinstance(entity, Actor) and entity.is_alive
+        )
+
+    def get_actor_at_location(self, x: int, y: int) -> Optional[Actor]:
+        for actor in self.actors:
+            if actor.x == x and actor.y == y: 
+                return actor
+            
+        return None
     def get_blocking_entity_at_location(
             self, 
             location_x: int,
@@ -67,9 +84,13 @@ class GameMap:
             default = tile_types.SHROUD,
         )
 
+        entities_sorted_for_rendering = sorted(
+            self.entities, key=lambda x: x.render_order.value
+        )
 
-        for entity in self.entities: 
+        for entity in entities_sorted_for_rendering: 
 
             #we want to show entities in pov
             if self.visible[entity.x, entity.y]: 
-                console.print(entity.x, entity.y, entity.char, fg=entity.color)
+                console.print(
+                    x=entity.x, y=entity.y, string=entity.char, fg=entity.color)
